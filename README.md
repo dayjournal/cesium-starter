@@ -3,10 +3,11 @@
 ![README02](img/README02.png)
 
 Start Cesium easily.  
-- [Cesium v1.93.0](https://github.com/CesiumGS/cesium)
-- [webpack v5.49.0](https://webpack.js.org)  
-- node v16.10.0
-- npm v7.24.0
+- [Cesium v1.94.3](https://github.com/CesiumGS/cesium)  
+- [TypeScript v4.5.4](https://www.typescriptlang.org)  
+- [Vite v2.9.9](https://vitejs.dev)  
+- node v18.1.0
+- npm v8.8.0
 
 <br>
 
@@ -17,32 +18,13 @@ Start Cesium easily.
 <br>
 
 Install package
-
 ```bash
 npm install
 ```
 
 <br>
 
-Add link to widgets.css
-
-/node_modules/cesium/package.json
-
-```json
-"exports": {
-    "./package.json": "./package.json",
-    ".": {
-        "require": "./index.cjs",
-        "import": "./Source/Cesium.js"
-    },
-    "./Build/Cesium/Widgets/widgets.css": "./Build/Cesium/Widgets/widgets.css"
-},
-```
-
-<br>
-
 build
-
 ```bash
 npm run build
 ```
@@ -50,7 +32,6 @@ npm run build
 <br>
 
 dev
-
 ```bash
 npm run dev
 ```
@@ -84,10 +65,11 @@ Copyright (c) 2022 Yasunori Kirimoto
 ![README02](img/README02.png)
 
 Cesiumを手軽に始める
-- [Cesium v1.93.0](https://github.com/CesiumGS/cesium)
-- [webpack v5.49.0](https://webpack.js.org)  
-- node v16.10.0
-- npm v7.24.0
+- [Cesium v1.94.3](https://github.com/CesiumGS/cesium)  
+- [TypeScript v4.5.4](https://www.typescriptlang.org)  
+- [Vite v2.9.9](https://vitejs.dev)  
+- node v18.1.0
+- npm v8.8.0
 
 <br>
 
@@ -102,25 +84,6 @@ Cesiumを手軽に始める
 ```bash
 npm install
 ```
-
-<br>
-
-widgets.cssのリンクを追加
-
-/node_modules/cesium/package.json
-
-```json
-"exports": {
-    "./package.json": "./package.json",
-    ".": {
-        "require": "./index.cjs",
-        "import": "./Source/Cesium.js"
-    },
-    "./Build/Cesium/Widgets/widgets.css": "./Build/Cesium/Widgets/widgets.css"
-},
-```
-
-
 
 <br>
 
