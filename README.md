@@ -3,9 +3,9 @@
 ![README02](img/README02.png)
 
 Start Cesium easily.  
-- [Cesium v1.94.3](https://github.com/CesiumGS/cesium)  
-- [TypeScript v4.5.4](https://www.typescriptlang.org)  
-- [Vite v2.9.9](https://vitejs.dev)  
+- [Cesium v1.97.0](https://github.com/CesiumGS/cesium)  
+- [TypeScript v4.8.2](https://www.typescriptlang.org)  
+- [Vite v3.1.0](https://vitejs.dev)  
 - node v18.1.0
 - npm v8.8.0
 
@@ -65,9 +65,9 @@ Copyright (c) 2022 Yasunori Kirimoto
 ![README02](img/README02.png)
 
 Cesiumを手軽に始める
-- [Cesium v1.94.3](https://github.com/CesiumGS/cesium)  
-- [TypeScript v4.5.4](https://www.typescriptlang.org)  
-- [Vite v2.9.9](https://vitejs.dev)  
+- [Cesium v1.97.0](https://github.com/CesiumGS/cesium)  
+- [TypeScript v4.8.2](https://www.typescriptlang.org)  
+- [Vite v3.1.0](https://vitejs.dev)  
 - node v18.1.0
 - npm v8.8.0
 
