@@ -1,6 +1,6 @@
 {
   "name": "cesium-starter",
-  "version": "1.105.0",
+  "version": "1.107.0",
   "description": "",
   "scripts": {
     "dev": "vite",
@@ -11,11 +11,11 @@
   "author": "Yasunori Kirimoto",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^5.0.4",
-    "vite": "^4.3.5"
+    "typescript": "^5.1.6",
+    "vite": "^4.4.1"
   },
   "dependencies": {
-    "cesium": "^1.105.0",
+    "cesium": "^1.107.0",
     "vite-plugin-cesium": "^1.2.22"
   }
 }
