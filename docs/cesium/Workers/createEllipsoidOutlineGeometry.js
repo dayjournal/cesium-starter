@@ -1,1 +1,26 @@
-define(["./defaultValue-f6d5e6da","./EllipsoidOutlineGeometry-52005f3f","./Transforms-f17097e5","./Matrix3-b2351961","./Math-355606c6","./Matrix2-7a8e9daf","./RuntimeError-9b4ce3fb","./combine-0c102d93","./ComponentDatatype-ab629b88","./WebGLConstants-7f557f93","./GeometryAttribute-9c1a6bab","./GeometryAttributes-1e4ddcd2","./GeometryOffsetAttribute-2579b8d2","./IndexDatatype-a9b1bc18"],(function(e,t,r,i,n,o,u,a,l,m,s,f,y,d){"use strict";return function(r,i){return e.defined(r.buffer)&&(r=t.EllipsoidOutlineGeometry.unpack(r,i)),t.EllipsoidOutlineGeometry.createGeometry(r)}}));
+/**
+ * @license
+ * Cesium - https://github.com/CesiumGS/cesium
+ * Version 1.137.0
+ *
+ * Copyright 2011-2022 Cesium Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Columbus View (Pat. Pend.)
+ *
+ * Portions licensed separately.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
+ */
+
+import{a as t}from"./chunk-OXYU2XFA.js";import"./chunk-IBQZCWHF.js";import"./chunk-KSX6TRAS.js";import"./chunk-GMTHOMGW.js";import"./chunk-BELR52CD.js";import"./chunk-BNHFHP3L.js";import"./chunk-4UHVCH4T.js";import"./chunk-4NDD6KRQ.js";import"./chunk-5ELDAYCN.js";import"./chunk-N6BI774S.js";import"./chunk-TI35VBH7.js";import"./chunk-6WLI3422.js";import"./chunk-ICY67TC6.js";import"./chunk-G2EMNOST.js";import"./chunk-4VFKVGYI.js";import"./chunk-3WJNS2B6.js";import{e as n}from"./chunk-XCN226AA.js";function u(r,e){return n(r.buffer,e)&&(r=t.unpack(r,e)),t.createGeometry(r)}var a=u;export{a as default};

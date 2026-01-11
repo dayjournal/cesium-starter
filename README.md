@@ -3,11 +3,11 @@
 ![README02](img/README02.png)
 
 Start Cesium easily.  
-- [Cesium v1.114.0](https://github.com/CesiumGS/cesium)  
-- [TypeScript v5.3.3](https://www.typescriptlang.org)  
-- [Vite v5.1.1](https://vitejs.dev)  
-- node v21.6.0
-- npm v10.2.4
+- [Cesium v1.137.0](https://github.com/CesiumGS/cesium)  
+- [TypeScript v5.9.3](https://www.typescriptlang.org)  
+- [Vite v7.3.1](https://vitejs.dev)  
+- node v24.4.1
+- npm v11.4.2
 
 <br>
 
@@ -48,7 +48,7 @@ npm run dev
 ## License
 MIT
 
-Copyright (c) 2022-2024 Yasunori Kirimoto
+Copyright (c) 2022-2026 Yasunori Kirimoto
 
 <br>
 
@@ -65,11 +65,11 @@ Copyright (c) 2022-2024 Yasunori Kirimoto
 ![README02](img/README02.png)
 
 Cesiumを手軽に始める
-- [Cesium v1.114.0](https://github.com/CesiumGS/cesium)  
-- [TypeScript v5.3.3](https://www.typescriptlang.org)  
-- [Vite v5.1.1](https://vitejs.dev)  
-- node v21.6.0
-- npm v10.2.4
+- [Cesium v1.137.0](https://github.com/CesiumGS/cesium)  
+- [TypeScript v5.9.3](https://www.typescriptlang.org)  
+- [Vite v7.3.1](https://vitejs.dev)  
+- node v24.4.1
+- npm v11.4.2
 
 <br>
 
@@ -111,6 +111,6 @@ npm run dev
 ## ライセンス
 MIT
 
-Copyright (c) 2022-2024 Yasunori Kirimoto
+Copyright (c) 2022-2026 Yasunori Kirimoto
 
 <br>
