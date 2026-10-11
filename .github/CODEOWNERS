@@ -1,0 +1,16 @@
+# Review policy for this repository:
+# - Dependency PRs from .github/workflows/deps-autoupdate.yml arm auto-merge
+#   once every update group passed build + e2e inside that workflow; GitHub
+#   merges them when the required CI check passes on the PR. Those get no
+#   human review, by design.
+# - Everything else, workflow changes included, is expected to go through
+#   human review by the owner below.
+#
+# This file only requests reviews. It becomes an actual gate when branch
+# protection enables "Require review from Code Owners" — which would also
+# block the bot's auto-merge above; the two policies cannot both be on.
+
+* @dayjournal
+
+# Kept separate: workflow changes are the most security-sensitive files here.
+.github/workflows/* @dayjournal

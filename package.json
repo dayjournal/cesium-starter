@@ -1,21 +1,33 @@
 {
   "name": "cesium-starter",
-  "version": "1.137.0",
+  "version": "1.137.0.1",
   "description": "",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build:ghpages": "tsc && vite build --mode ghpages",
+    "preview": "vite preview",
+    "preview:ghpages": "vite preview --mode ghpages --base /cesium-starter/",
+    "test": "pnpm run build && playwright test e2e/smoke.spec.ts",
+    "test:visual": "pnpm run build && playwright test e2e/visual.spec.ts",
+    "test:visual:update": "pnpm run build && playwright test e2e/visual.spec.ts --update-snapshots",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [],
   "author": "Yasunori Kirimoto",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^24.19.1",
+    "prettier": "^3.9.9",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2"
   },
   "dependencies": {
     "cesium": "^1.137.0",
     "vite-plugin-cesium": "^1.2.23"
-  }
+  },
+  "packageManager": "pnpm@11.9.0+sha512.bd682d5d03fe525ef7c9fd6780c6884d1e756ac4c9c9fe00c538782824310dcf90e3ddc4f53835f06dfaebd5085e41855e0bcbb3b60de2ac5bbab89e5036f03b",
+  "private": true
 }
