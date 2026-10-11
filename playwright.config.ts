@@ -2,7 +2,9 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
     testDir: 'e2e',
-    timeout: 60_000,
+    // Software WebGL rendering makes concurrent map tests compete for CPU.
+    workers: process.env.CI ? 1 : undefined,
+    timeout: process.env.CI ? 150_000 : 60_000,
     expect: {
         timeout: 10_000,
     },

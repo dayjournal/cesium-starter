@@ -8,11 +8,19 @@ fixture response: `{z}/{x}/{y}` must be non-negative safe integers, with
 
 Both smoke and visual tests wait for the initial camera flight to finish and
 for `globe.tilesLoaded` to remain true for two rendered frames. The tests also
-check imagery-provider errors while waiting and at teardown. Playwright installs
-these observers from `e2e/_helpers.ts`; the app source has no test hooks. When the
-built page loads `cesium/Cesium.js`, the test wraps `Camera.flyTo` to observe its
-completion/cancellation and `Scene.render` to subscribe to the initial imagery
-providers' `errorEvent` and the scene's `postRender`. The original methods and any
+check imagery-provider errors while waiting and at teardown.
+
+CI runs one test at a time to avoid competing for CPU during software WebGL
+rendering, with a 90-second map-readiness budget and a 150-second overall test
+timeout. Local runs retain the 20-second readiness budget and 60-second test
+timeout. A readiness failure logs the camera-flight state, rendered frame count,
+tile queue length and imagery errors.
+
+Playwright installs these observers from `e2e/_helpers.ts`; the app source has no
+test hooks. When the built page loads `cesium/Cesium.js`, the test wraps
+`Camera.flyTo` to observe its completion/cancellation and `Scene.render` to
+subscribe to the initial imagery providers' `errorEvent`, the globe's
+`tileLoadProgressEvent` and the scene's `postRender`. The original methods and any
 existing flight callbacks still run. The observer uses public Cesium APIs only.
 Request counts and zoom levels alone do not prove that tiles loaded.
 
