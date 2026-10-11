@@ -7,7 +7,7 @@ import * as Cesium from 'cesium';
 const imageryProvider = new Cesium.UrlTemplateImageryProvider({
     url: 'https://tile.mierune.co.jp/mierune_mono/{z}/{x}/{y}.png',
     credit: new Cesium.Credit(
-        "Maptiles by <a href='https://mierune.co.jp' target='_blank'>MIERUNE</a>, under CC BY. Data by <a href='https://osm.org/copyright' target='_blank'>OpenStreetMap</a> contributors, under ODbL."
+        '<a href="https://mierune.co.jp">MIERUNE Inc.</a> <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
     ),
 });
 

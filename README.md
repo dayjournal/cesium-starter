@@ -81,7 +81,13 @@ pnpm run build
 pnpm run preview --base /cesium-starter/
 ```
 
-`build:ghpages` and `preview:ghpages` remain available for local checks using `docs/`. The automatic deployment uses `dist/` and does not require rebuilding or committing `docs/`.
+`build:ghpages` and `preview:ghpages` remain available for local checks using `docs/`. The automatic deployment uses `dist/`. Generated `dist/` and `docs/` files are ignored and are not committed.
+
+<br>
+
+Maintenance
+
+For tools outside the daily dependency updates (Playwright, Node.js types, Prettier, Node.js and pnpm), follow [the manual update procedure](.github/AUTOMATION.md#manual-tooling-updates).
 
 <br>
 
@@ -207,7 +213,13 @@ pnpm run build
 pnpm run preview --base /cesium-starter/
 ```
 
-`build:ghpages`と`preview:ghpages`は、`docs/`を使ったローカル確認用に残しています。自動公開は`dist/`を使用するため、`docs/`の再生成やコミットは不要です。
+`build:ghpages`と`preview:ghpages`は、`docs/`を使ったローカル確認用に残しています。自動公開は`dist/`を使用します。生成された`dist/`と`docs/`はGitの管理対象外で、コミットしません。
+
+<br>
+
+保守
+
+日次の依存関係更新に含まれないPlaywright、Node.jsの型定義、Prettier、Node.js、pnpmは、[手動更新手順](.github/AUTOMATION.md#manual-tooling-updates)に沿って確認・更新します。
 
 <br>
 
