@@ -9,6 +9,9 @@ declare global {
             observerInstalled: boolean;
             flightComplete: boolean;
             readyFrames: number;
+            renderedFrames: number;
+            tilesLoaded: boolean;
+            queuedTiles: number;
             errors: string[];
         };
     }
@@ -26,9 +29,9 @@ const TILE_URL_PATTERN = /\/mierune_mono\/(\d+)\/(\d+)\/(\d+)\.png$/;
 // the globe or the flight broke.
 const MIN_EXPECTED_TILES = 40;
 const MIN_EXPECTED_LEVEL = 8;
-// Budget for the flight to end and the tiles to come in. Above the 10s expect
-// timeout, well under the 60s test timeout (playwright.config.ts).
-export const MAP_READY_TIMEOUT_MS = 20_000;
+// Software WebGL on CI needs more time to process the tile queue after the flight.
+// Leave room for navigation and the screenshot within the overall test timeout.
+export const MAP_READY_TIMEOUT_MS = process.env.CI ? 90_000 : 20_000;
 
 // Fail any test that produced an uncaught page error (includes unhandled
 // rejections) or a console error during its run. The fixture is auto: true,
@@ -43,6 +46,9 @@ const test = base.extend<{ _runtimeErrors: void }>({
                     observerInstalled: false,
                     flightComplete: false,
                     readyFrames: 0,
+                    renderedFrames: 0,
+                    tilesLoaded: false,
+                    queuedTiles: 0,
                     errors: [] as string[],
                 };
                 window.__CESIUM_E2E__ = state;
@@ -82,6 +88,11 @@ const test = base.extend<{ _runtimeErrors: void }>({
                         cesium.Scene.prototype.render = function (time) {
                             if (!scenes.has(this)) {
                                 scenes.add(this);
+                                this.globe.tileLoadProgressEvent.addEventListener(
+                                    (count: number) => {
+                                        state.queuedTiles = count;
+                                    }
+                                );
                                 for (let i = 0; i < this.imageryLayers.length; i++) {
                                     this.imageryLayers
                                         .get(i)
@@ -94,6 +105,8 @@ const test = base.extend<{ _runtimeErrors: void }>({
                                         );
                                 }
                                 this.postRender.addEventListener(() => {
+                                    state.renderedFrames++;
+                                    state.tilesLoaded = this.globe.tilesLoaded;
                                     state.readyFrames =
                                         state.flightComplete && this.globe.tilesLoaded
                                             ? state.readyFrames + 1
@@ -183,20 +196,26 @@ function tileLevel(url: string): number {
 }
 
 async function waitForMapReady(page: Page) {
-    await page.waitForFunction(
-        () => {
-            const state = window.__CESIUM_E2E__;
-            if (!state?.observerInstalled) {
-                throw new Error(
-                    'Cesium test observer was not installed; serve the built app with vite preview'
-                );
-            }
-            if (state.errors.length) throw new Error(state.errors.join('\n'));
-            return state.flightComplete && state.readyFrames >= 2;
-        },
-        undefined,
-        { timeout: MAP_READY_TIMEOUT_MS }
-    );
+    try {
+        await page.waitForFunction(
+            () => {
+                const state = window.__CESIUM_E2E__;
+                if (!state?.observerInstalled) {
+                    throw new Error(
+                        'Cesium test observer was not installed; serve the built app with vite preview'
+                    );
+                }
+                if (state.errors.length) throw new Error(state.errors.join('\n'));
+                return state.flightComplete && state.readyFrames >= 2;
+            },
+            undefined,
+            { timeout: MAP_READY_TIMEOUT_MS }
+        );
+    } catch (error) {
+        const state = await page.evaluate(() => window.__CESIUM_E2E__).catch(() => undefined);
+        console.log('Cesium map readiness at failure:', state);
+        throw error;
+    }
 }
 
 async function expectValidTileRequests(tileUrls: string[]) {
