@@ -16,8 +16,8 @@ Copy as they are:
 - `.github/package.json`, `.github/package-lock.json` (validator tools)
 - `.github/dependabot.yml`, `.github/CODEOWNERS`, `.github/AUTOMATION.md`
 - `pnpm-workspace.yaml`, `.prettierignore`, `.node-version`
-- the `.gitignore` entries for `artifacts/`, `.playwright-snapshots/`, `test-results/`
-  and `playwright-report/`
+- the `.gitignore` entries for `dist`, `dist-subpath/`, `/docs/`, `artifacts/`,
+  `.playwright-snapshots/`, `test-results/` and `playwright-report/`
 
 Edit for the repository:
 
@@ -29,15 +29,15 @@ Edit for the repository:
 - `e2e/_helpers.ts`, `e2e/fixtures/`, `e2e/smoke.spec.ts` and
   `e2e/visual.spec.ts`: the map library's own fixtures and readiness checks
 
-Remove: the root `package-lock.json`, any older update workflow or script, a tracked
-`artifacts/` folder.
+Remove: the root `package-lock.json`, any older update workflow or script,
+and tracked build outputs in `dist/`, `docs/` or `artifacts/`.
 
 Optional: `.github/workflows/pages.yml` builds and deploys `dist/` after CI
 succeeds on main. Adapt its build step to the library's base-path handling;
-see [GitHub Pages](#github-pages). Legacy `docs/` builds and their scripts may
-remain for local compatibility checks, but the Actions deployment does not
-use them or require generated files to be committed. Without this workflow,
-a starter that publishes `docs/` from a branch still needs manual rebuilds.
+see [GitHub Pages](#github-pages). Legacy `docs/` build scripts may remain
+for local compatibility checks, but their generated files are ignored and
+not committed. Configure Pages to use GitHub Actions before removing tracked
+`docs/` from a starter that still publishes from a branch.
 
 ## What the repository must have
 
@@ -46,6 +46,8 @@ a starter that publishes `docs/` from a branch still needs manual rebuilds.
   `^x.y.z` ranges; package.json indented with 2 spaces (the update script
   rewrites it that way)
 - `.node-version`
+- `vite.config.mts` for an explicit ESM Vite configuration; include it in
+  `tsconfig.json` while keeping library-specific plugins, base and output settings
 - `scripts.build` runs `tsc` before `vite build`, so a TypeScript update is
   type-checked
 - `e2e/smoke.spec.ts` and `e2e/visual.spec.ts`, with exactly one
@@ -128,7 +130,8 @@ The build publishes `dist/`. Leaflet and OpenLayers set `VITE_BASE` to the
 repository path. Cesium keeps its relative `base: './'` so the plugin's runtime
 assets are copied and resolved correctly. Keep those library-specific build
 steps when sharing this workflow. Retained `docs/` scripts are local checks,
-not part of the automatic publication path.
+not part of the automatic publication path. Generated `dist/` and `docs/`
+files are ignored and are not committed.
 
 References: [Pages source settings](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 and [custom Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
@@ -162,6 +165,41 @@ Only stable `x.y.z` releases that are at least 7 days old are taken, the same
 rule pnpm applies through `minimumReleaseAge` in `pnpm-workspace.yaml`. A group
 whose install, build or e2e fails is rolled back and listed in the PR; the other
 groups still ship.
+
+## Manual tooling updates
+
+The daily workflow updates only the groups in `deps-config.mjs`.
+`@playwright/test`, `@types/node` and `prettier` are maintained manually,
+as are Node.js (`.node-version`) and pnpm (`packageManager`). Dependabot
+separately covers GitHub Actions and the validator packages in `.github/`.
+Review the manual tools monthly and when a managed update reveals a
+compatibility problem.
+
+1. With the current versions, run `pnpm install --frozen-lockfile`,
+   `pnpm exec playwright install chromium`, `pnpm run format:check` and
+   `pnpm test`. Inspect the map, then record a visual baseline with
+   `pnpm run test:visual:update` before changing versions.
+2. Select compatible stable releases that are at least 7 days old. Keep
+   `@types/node` on the Node.js major used by the project. Update each tool
+   deliberately with the project's pinned pnpm and regenerate
+   `pnpm-lock.yaml`; do not bypass `minimumReleaseAge` or update unrelated
+   map-library packages as part of this step.
+3. For Node.js, update `.node-version` and both language sections of
+   `README.md`. For pnpm, update `packageManager` and both README sections,
+   then regenerate the lockfile with that pnpm version. Keep these version
+   declarations consistent and check the new runtime's supported platforms.
+4. Run `pnpm install --frozen-lockfile`, `pnpm run format:check`, `pnpm test`
+   and `pnpm run test:visual`. After changing Playwright, install its Chromium
+   again before testing. The smoke and visual tests must cover both `root`
+   and `subpath`; `pnpm test` also runs TypeScript checking and the build.
+   Run the validator tests described in [Checking update results](#checking-update-results)
+   as well, especially after changing Node.js or pnpm. Where available, also
+   run `pnpm run build:ghpages` to check the retained local `docs/` build.
+5. Inspect formatting and screenshot differences. If a browser update
+   deliberately changes rendering, review the actual images before explicitly
+   refreshing local baselines and rerunning `pnpm run test:visual`. Do not
+   regenerate a failing baseline just to make the test pass. Baselines and
+   build outputs stay untracked.
 
 ## Running the update script locally
 
