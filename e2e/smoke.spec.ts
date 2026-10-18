@@ -4,6 +4,7 @@ import {
     stabilizeTileRequests,
     waitForMapReady,
     expectValidTileRequests,
+    tileLevel,
     MAP_READY_TIMEOUT_MS,
 } from './_helpers';
 
@@ -40,5 +41,19 @@ test('smoke: Cesium renders loaded tiles after the camera flight', async ({ page
         const response = await page.request.get(new URL(file, baseURL).href);
         expect(response.status(), file).toBe(200);
         expect(response.headers()['content-type'], file).toContain(contentType);
+    }
+});
+
+test('smoke: the tile URL check rejects anything but a valid MIERUNE tile', async () => {
+    expect(tileLevel('https://tile.mierune.co.jp/mierune_mono/8/227/103.png')).toBe(8);
+    for (const url of [
+        // Wrong host, wrong path prefix, unexpanded template, out of range.
+        'https://example.com/mierune_mono/8/227/103.png',
+        'https://tile.mierune.co.jp/other/mierune_mono/8/227/103.png',
+        'https://tile.mierune.co.jp/mierune_mono/{z}/{x}/{y}.png',
+        'https://tile.mierune.co.jp/mierune_mono/8/256/103.png',
+        'https://tile.mierune.co.jp/mierune_mono/8/227/256.png',
+    ]) {
+        expect(tileLevel(url), url).toBe(-1);
     }
 });

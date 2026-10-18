@@ -22,6 +22,9 @@ export default defineConfig({
         deviceScaleFactor: 1,
         colorScheme: 'light',
         reducedMotion: 'reduce',
+        // Kept in test-results/ for a failed test; CI uploads that directory.
+        screenshot: 'only-on-failure',
+        trace: 'retain-on-failure',
     },
     // The same dist/ is served at the site root and under /cesium-starter/,
     // the GitHub Pages project path. Specs navigate with page.goto('./') so
@@ -32,17 +35,22 @@ export default defineConfig({
     ],
     // `vite preview` serves the existing dist/ build — run `pnpm run build`
     // first (as `pnpm test` does), or the tests hit a stale or missing build.
+    // vite.config.mts sets the relative base and dist/ without reading any
+    // environment variable, so a local .env cannot change what the tests
+    // serve. The servers are never reused and bind their ports strictly, so a
+    // run fails instead of testing whatever another process serves on the port.
     webServer: [
         {
-            command: 'pnpm run preview --host 127.0.0.1 --port 4173',
+            command: 'pnpm run preview --host 127.0.0.1 --port 4173 --strictPort',
             url: 'http://127.0.0.1:4173/',
-            reuseExistingServer: !process.env.CI,
+            reuseExistingServer: false,
             timeout: 120_000,
         },
         {
-            command: 'pnpm run preview --host 127.0.0.1 --port 4174 --base /cesium-starter/',
+            command:
+                'pnpm run preview --host 127.0.0.1 --port 4174 --base /cesium-starter/ --strictPort',
             url: 'http://127.0.0.1:4174/cesium-starter/',
-            reuseExistingServer: !process.env.CI,
+            reuseExistingServer: false,
             timeout: 120_000,
         },
     ],

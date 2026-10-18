@@ -21,8 +21,12 @@ declare global {
 // the MIERUNE tile server. See fixtures/README.md.
 const TILE_PNG = fs.readFileSync(path.join(__dirname, 'fixtures', 'fallback.png'));
 
-// Validate each request before a fixture can hide an invalid tile URL.
-const TILE_URL_PATTERN = /\/mierune_mono\/(\d+)\/(\d+)\/(\d+)\.png$/;
+// Validate each request before a fixture can hide an invalid tile URL. The
+// whole URL is matched, so a wrong host or path prefix in the app's URL
+// template cannot pass.
+const TILE_ORIGIN = 'https://tile.mierune.co.jp';
+const TILE_URL_PATTERN =
+    /^https:\/\/tile\.mierune\.co\.jp\/mierune_mono\/(\d+)\/(\d+)\/(\d+)\.png$/;
 // The camera flies from the whole-earth view (levels 1-3) to the 100 km view
 // in src/main.ts, which needs level 8-10 tiles in the 1280x720 viewport. A
 // full flight requests about 150 tiles; far fewer, or no deep level, means
@@ -34,12 +38,13 @@ const MIN_EXPECTED_LEVEL = 8;
 export const MAP_READY_TIMEOUT_MS = process.env.CI ? 90_000 : 20_000;
 
 // Fail any test that produced an uncaught page error (includes unhandled
-// rejections) or a console error during its run. The fixture is auto: true,
-// so every spec importing `test` from this file gets the check implicitly —
-// there is nothing to call from the spec.
+// rejections), a console error, a failed tile or a request to anything but the
+// preview server and the mocked tile host during its run. The fixture is auto:
+// true, so every spec importing `test` from this file gets the check
+// implicitly — there is nothing to call from the spec.
 const test = base.extend<{ _runtimeErrors: void }>({
     _runtimeErrors: [
-        async ({ page }, use) => {
+        async ({ page, baseURL }, use) => {
             const errors: string[] = [];
             await page.addInitScript(() => {
                 const state = {
@@ -120,6 +125,18 @@ const test = base.extend<{ _runtimeErrors: void }>({
                     true
                 );
             });
+            // Routes are matched newest first, so this catch-all only sees
+            // requests that stabilizeTileRequests did not take. Anything that
+            // would leave the preview server is a network dependency the
+            // tests must not have.
+            if (!baseURL) throw new Error('baseURL is required to tell preview requests apart');
+            const previewOrigin = new URL(baseURL).origin;
+            await page.route('**/*', (route) => {
+                const url = route.request().url();
+                if (url.startsWith(`${previewOrigin}/`)) return route.fallback();
+                errors.push(`unexpected request: ${url}`);
+                return route.abort();
+            });
             page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
             page.on('console', (msg) => {
                 // Cesium reports a failed tile load through the provider's
@@ -155,13 +172,11 @@ async function stabilizeTileRequests(page: Page): Promise<string[]> {
     // The browser requests /favicon.ico on its own; vite preview would 404 it,
     // which the runtime-error fixture would flag as a console error.
     await page.route('**/favicon.ico', (route) => route.fulfill({ status: 204 }));
-    await page.route('https://tile.mierune.co.jp/**', async (route) => {
+    await page.route(`${TILE_ORIGIN}/**`, async (route) => {
         const url = route.request().url();
         tileUrls.push(url);
-        expect(
-            tileLevel(url),
-            `tile URL should contain numeric {z}/{x}/{y} within range: ${url}`
-        ).toBeGreaterThanOrEqual(0);
+        // A bad URL gets no fixture; expectValidTileRequests reports it.
+        if (tileLevel(url) < 0) return route.abort();
         try {
             await route.fulfill({
                 status: 200,
@@ -180,8 +195,8 @@ async function stabilizeTileRequests(page: Page): Promise<string[]> {
     return tileUrls;
 }
 
-// Level of a well-formed tile URL, or -1. Web Mercator has 2^z tiles per axis
-// at level z, so larger x or y never exist on the tile server.
+// Level of a well-formed tile URL on the tile host, or -1. Web Mercator has
+// 2^z tiles per axis at level z, so larger x or y never exist on the server.
 function tileLevel(url: string): number {
     const match = TILE_URL_PATTERN.exec(url);
     if (!match) return -1;
@@ -232,7 +247,10 @@ async function expectValidTileRequests(tileUrls: string[]) {
         })
         .toBeGreaterThanOrEqual(MIN_EXPECTED_LEVEL);
     const invalid = tileUrls.filter((url) => tileLevel(url) < 0);
-    expect(invalid, 'tile URLs should contain numeric {z}/{x}/{y} within range').toEqual([]);
+    expect(
+        invalid,
+        `tile URLs should be ${TILE_ORIGIN}/mierune_mono/{z}/{x}/{y}.png with coordinates in range`
+    ).toEqual([]);
 }
 
-export { expect, test, stabilizeTileRequests, waitForMapReady, expectValidTileRequests };
+export { expect, test, stabilizeTileRequests, waitForMapReady, expectValidTileRequests, tileLevel };

@@ -1,10 +1,14 @@
 # Tile fixtures
 
-The tests answer every request to `https://tile.mierune.co.jp/` with
+The tests answer every valid tile request to `https://tile.mierune.co.jp/` with
 `fallback.png`, a 256×256 gray grid, so they do not depend on the network and
 the globe looks the same in every run. Each requested URL is checked before the
-fixture response: `{z}/{x}/{y}` must be non-negative safe integers, with
-`x < 2 ** z` and `y < 2 ** z` for the Web Mercator tile grid.
+fixture response: the whole URL must be
+`https://tile.mierune.co.jp/mierune_mono/{z}/{x}/{y}.png`, with non-negative
+safe integers and `x < 2 ** z`, `y < 2 ** z` for the Web Mercator tile grid. A
+request that fails the check is aborted instead of answered, and the test lists
+it. Any other request that leaves the preview server is aborted and fails the
+test.
 
 Both smoke and visual tests wait for the initial camera flight to finish and
 for `globe.tilesLoaded` to remain true for two rendered frames. The tests also
