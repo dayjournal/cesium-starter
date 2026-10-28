@@ -1,6 +1,6 @@
 {
   "name": "cesium-starter",
-  "version": "1.146.0.2",
+  "version": "1.146.0.3",
   "description": "",
   "scripts": {
     "dev": "vite",
@@ -22,7 +22,7 @@
     "@types/node": "^24.19.2",
     "prettier": "^3.9.10",
     "typescript": "^7.0.2",
-    "vite": "^8.3.4"
+    "vite": "^8.3.5"
   },
   "dependencies": {
     "cesium": "^1.146.0",
