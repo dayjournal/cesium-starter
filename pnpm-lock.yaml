@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       cesium:
-        specifier: ^1.146.0
-        version: 1.146.0
+        specifier: ^1.147.0
+        version: 1.147.0
       vite-plugin-cesium:
         specifier: ^1.2.23
-        version: 1.2.23(cesium@1.146.0)(rollup@2.79.2)(vite@8.3.5(@types/node@24.19.2))
+        version: 1.2.23(cesium@1.147.0)(rollup@2.79.2)(vite@8.3.5(@types/node@24.19.2))
     devDependencies:
       '@playwright/test':
         specifier: ^1.63.0
@@ -33,20 +33,24 @@ importers:
 
 packages:
 
-  '@cesium/core@0.1.0':
-    resolution: {integrity: sha512-SD5H3dnWMIiJs04YQnV71ziFzAKcigPEwUFUv9mCX7Y0X7wZXgxGvNz4NCqmoVqHqfSQgdTDzP52fRHl7Jthpg==}
-    engines: {node: '>=22.0.0'}
+  '@cesium/core@0.1.1':
+    resolution: {integrity: sha512-2twC6bAYWdrJ4YVS2UPCpgkE7EZWHl+GVuh5n9IT6gVL9W9OYPas29Vh+wrUVI/9Hs8TeiNtis+Du2U9b+ce6A==}
+    engines: {node: '>=22.17.0'}
 
-  '@cesium/engine@26.4.0':
-    resolution: {integrity: sha512-OQkL54hPRBkOto0NmArLkEpbWZzTaWAhsx/mGNw85jXdr/nl/OvTqLC8QZv5wKSv4imuzHq/kT6IIy8/B3QLFQ==}
-    engines: {node: '>=22.0.0'}
+  '@cesium/engine@26.5.0':
+    resolution: {integrity: sha512-vpMuIOQ7QXNVrVTCCPWQ9y0zyfR+lhKLUOWt8XRCrDibtsASVpXGRFKQEdONf2D2EznIAQZ09sGOC8LwhvOeIQ==}
+    engines: {node: '>=22.17.0'}
+
+  '@cesium/gltf@0.1.1':
+    resolution: {integrity: sha512-tACM+dBXm+hXU4iyMynEK11ymce6GqUaB8TjF7jbtqBfxVYh45C2zBjNnv3ElpwhlwjLjwbc25zKZrO8oGYegw==}
+    engines: {node: '>=22.17.0'}
 
   '@cesium/wasm-splats@0.1.0-alpha.2':
     resolution: {integrity: sha512-t9pMkknv31hhIbLpMa8yPvmqfpvs5UkUjgqlQv9SeO8VerCXOYnyP8/486BDaFrztM0A7FMbRjsXtNeKvqQghA==}
 
-  '@cesium/widgets@16.3.0':
-    resolution: {integrity: sha512-ui0Rp2FR9H8QKsoR9iID/JZZbC7V8Kc6djewuFn7zXPlWa/cb4/vZ8ogIrRneZHFxh0vBrieYDaLeNn346bcEw==}
-    engines: {node: '>=22.0.0'}
+  '@cesium/widgets@16.3.1':
+    resolution: {integrity: sha512-eyAGPYYL4v/WeLasmphRwxFcCl/qeTcRhncbBlOzMTSTLjgjZSea0IcEDCKC2ip/mHPeGe887X84xi1SV8mcEQ==}
+    engines: {node: '>=22.17.0'}
 
   '@oxc-project/types@0.155.0':
     resolution: {integrity: sha512-SeE8JPwW1xs1tHeNycjUtUBdhorRa8o4jlvjwk49R7/Z291i+4DQa7JJIgOm/TaYQZx+QrPQbVJ/9c8dMIZN8Q==}
@@ -310,9 +314,9 @@ packages:
   bitmap-sdf@1.0.4:
     resolution: {integrity: sha512-1G3U4n5JE6RAiALMxu0p1XmeZkTeCwGKykzsLTCqVzfSDaN6S7fKnkIkfejogz+iwqBWc0UYAIKnKHNN7pSfDg==}
 
-  cesium@1.146.0:
-    resolution: {integrity: sha512-hvKkURnmc8OZ8qKNrwawl/YijwAItaWLbpAdIVNAUXODCLMjpod4PbdLuwo8Ab6ETL915MUGV2NocHFCRCeqqA==}
-    engines: {node: '>=22.0.0'}
+  cesium@1.147.0:
+    resolution: {integrity: sha512-gY5TF0rSyIMtnSIFHUuiHnrCuhdKaHUzLWFcjxytsdheKfKtYYOWicIWMypGjwYfnmJrgPgNF7HNjO9SK/JIkw==}
+    engines: {node: '>=22.17.0'}
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -696,11 +700,16 @@ packages:
 
 snapshots:
 
-  '@cesium/core@0.1.0': {}
-
-  '@cesium/engine@26.4.0':
+  '@cesium/core@0.1.1':
     dependencies:
-      '@cesium/core': 0.1.0
+      earcut: 3.0.2
+      mersenne-twister: 1.1.0
+      urijs: 1.19.11
+
+  '@cesium/engine@26.5.0':
+    dependencies:
+      '@cesium/core': 0.1.1
+      '@cesium/gltf': 0.1.1
       '@cesium/wasm-splats': 0.1.0-alpha.2
       '@spz-loader/core': 0.3.1
       '@tweenjs/tween.js': 25.0.0
@@ -709,7 +718,6 @@ snapshots:
       bitmap-sdf: 1.0.4
       dompurify: 3.4.16
       draco3d: 1.5.7
-      earcut: 3.0.2
       grapheme-splitter: 1.0.4
       jsep: 1.4.0
       kdbush: 4.1.0
@@ -723,12 +731,16 @@ snapshots:
       topojson-client: 3.1.0
       urijs: 1.19.11
 
+  '@cesium/gltf@0.1.1':
+    dependencies:
+      '@cesium/core': 0.1.1
+
   '@cesium/wasm-splats@0.1.0-alpha.2': {}
 
-  '@cesium/widgets@16.3.0':
+  '@cesium/widgets@16.3.1':
     dependencies:
-      '@cesium/core': 0.1.0
-      '@cesium/engine': 26.4.0
+      '@cesium/core': 0.1.1
+      '@cesium/engine': 26.5.0
       nosleep.js: 0.12.0
 
   '@oxc-project/types@0.155.0': {}
@@ -872,11 +884,12 @@ snapshots:
 
   bitmap-sdf@1.0.4: {}
 
-  cesium@1.146.0:
+  cesium@1.147.0:
     dependencies:
-      '@cesium/core': 0.1.0
-      '@cesium/engine': 26.4.0
-      '@cesium/widgets': 16.3.0
+      '@cesium/core': 0.1.1
+      '@cesium/engine': 26.5.0
+      '@cesium/gltf': 0.1.1
+      '@cesium/widgets': 16.3.1
       protobufjs: 8.8.0
 
   commander@2.20.3: {}
@@ -1176,9 +1189,9 @@ snapshots:
 
   urijs@1.19.11: {}
 
-  vite-plugin-cesium@1.2.23(cesium@1.146.0)(rollup@2.79.2)(vite@8.3.5(@types/node@24.19.2)):
+  vite-plugin-cesium@1.2.23(cesium@1.147.0)(rollup@2.79.2)(vite@8.3.5(@types/node@24.19.2)):
     dependencies:
-      cesium: 1.146.0
+      cesium: 1.147.0
       fs-extra: 9.1.0
       rollup-plugin-external-globals: 0.6.1(rollup@2.79.2)
       serve-static: 1.16.3
